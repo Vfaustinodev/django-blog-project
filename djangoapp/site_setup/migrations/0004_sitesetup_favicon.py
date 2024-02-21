@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sitesetup',
             name='favicon',
-            field=models.ImageField(blank=True, default='', upload_to='assests/favicon/%Y/%m'),
+            field=models.ImageField(blank=True, default='', upload_to='assets/favicon/%Y/%m'),
         ),
     ]
