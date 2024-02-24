@@ -4,7 +4,7 @@ from django.shortcuts import render
 posts = list(range(1000))
 
 def index(request):
-    paginator = Paginator(posts, 9)
+    paginator = Paginator(posts, 6)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
