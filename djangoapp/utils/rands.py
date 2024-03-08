@@ -1,6 +1,6 @@
 from random import SystemRandom
 import string
-from django.utils.text import slugify # slugfy transforma string em string url
+from django.utils.text import slugify # slugify transforma string em string url
 
 def random_letters(k=5):
     return ''.join(SystemRandom().choices(
