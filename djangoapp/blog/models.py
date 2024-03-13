@@ -1,7 +1,26 @@
 from django.contrib.auth.models import User
 from django.db import models
-from utils.rands import slugify_new
+from django_summernote.models import AbstractAttachment
 from utils.images import resize_image
+from utils.rands import slugify_new
+
+
+class PostAttachment(AbstractAttachment):
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.file.name
+
+        current_file_name = str(self.file.name)
+        super_save = super().save(*args, **kwargs)
+        file_changed = False
+
+        if self.file:
+            file_changed = current_file_name != self.file.name
+
+        if file_changed:
+            resize_image(self.file, 900, True, 70)
+
+        return super_save
 
 
 class Tag(models.Model):
@@ -75,7 +94,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=65,)
     slug = models.SlugField(
-        unique=True, default='',
+        unique=True, default="",
         null=False, blank=True, max_length=255
     )
     excerpt = models.CharField(max_length=150)
@@ -98,7 +117,7 @@ class Post(models.Model):
         User,
         on_delete=models.SET_NULL,
         blank=True, null=True,
-        related_name='post_created_by'
+        related_name='post_created_by' #Chamada para não ocasionar nomes iguais ao implementar no Html
     )
     updated_at = models.DateTimeField(auto_now=True)
     # user.post_updated_by.all
@@ -108,8 +127,9 @@ class Post(models.Model):
         blank=True, null=True,
         related_name='post_updated_by'
     )
+
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True,
+        Category, null=True, on_delete=models.SET_NULL, blank=True,
         default=None,
     )
     tags = models.ManyToManyField(Tag, blank=True, default='')
@@ -121,14 +141,13 @@ class Post(models.Model):
         if not self.slug:
             self.slug = slugify_new(self.title, 4)
 
-        ##Antes de Salvar
         current_cover_name = str(self.cover.name)
         super_save = super().save(*args, **kwargs)
         cover_changed = False
 
         if self.cover:
             cover_changed = current_cover_name != self.cover.name
-        
+
         if cover_changed:
             resize_image(self.cover, 900, True, 70)
 

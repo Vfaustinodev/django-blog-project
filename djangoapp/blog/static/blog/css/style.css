@@ -260,7 +260,7 @@ html,
   width: 100%;
   background-color: transparent;
   border: 2px solid hsl(var(--clr-gray-ltr));
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   padding: var(--spacing-smlst);
   padding-inline-end: calc(var(--spacing-base) + var(--spacing-micro));
   border-radius: var(--br-base);
